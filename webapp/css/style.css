@@ -1,0 +1,4 @@
+canvas{
+  /*prevent interaction with the canvas*/
+  pointer-events:none;
+}

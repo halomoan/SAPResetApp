@@ -1,0 +1,100 @@
+<mvc:View 
+	busyIndicatorDelay = "{detailView>/delay}"
+	busy = "{detailView>/busy}"
+	xmlns:core="sap.ui.core" 
+	xmlns:mvc="sap.ui.core.mvc" 
+	xmlns="sap.m" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:html="http://www.w3.org/1999/xhtml" controllerName="app.sap.resetSAPResetApp.controller.resetSAP">
+	<App>
+		<pages>
+			<Page title="{i18n>title}">
+				<content>
+				    <VBox width="100%" direction="Column" id="__vbox0">
+				        <items>
+				           <Panel expandable="true" expanded="false" headerText="{i18n>howToTitle}" width="auto" class="sapUiResponsiveMargin">
+							<content>
+								<List>
+								<items>
+									<ObjectListItem
+										title="Step One"
+										type="Inactive">
+										<attributes>
+										<ObjectAttribute text="Enter Your SAP User ID" />
+										<ObjectAttribute text="Enter Captcha Code For Verification" />
+										<ObjectAttribute text="Choose the ERP or BW system" />
+										</attributes>
+									</ObjectListItem>
+									<ObjectListItem
+										title="Step Two"
+										type="Inactive">
+										<attributes>
+										<ObjectAttribute text="Check Your Email For One-Time Password and The Reset Link" />
+										</attributes>
+									</ObjectListItem>
+								</items>
+								</List>
+							</content>
+						</Panel>
+				<f:SimpleForm id="SAPUserIDForm"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="3"
+							labelSpanL="3"
+							labelSpanM="3"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="4"
+							emptySpanL="4"
+							emptySpanM="4"
+							emptySpanS="0"
+							columnsXL="1"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false" >
+							<f:content>
+							
+							
+								<Label text="SAP User ID *" labelFor="inputSAPID"/>
+								<Input
+									id="inputSAPID"
+									type="Text"
+									placeholder="Enter Your SAP User ID"
+									enabled="true"
+									maxLength="12"
+									liveChange = "onSAPIDLiveChange"
+								/>
+								<Label text="Validation Code *" labelFor="inputCaptcha"/>
+									<Input
+									id="inputCaptcha"
+									type="Text"
+									enabled="true"
+									maxLength="8"
+									liveChange = "onCaptchaLiveChange"
+								/>
+								<FlexBox  justifyContent="Start">
+									<items>
+										<core:HTML id="html">
+										</core:HTML>
+									    <Button icon="sap-icon://synchronize" type="Transparent" press="onRefreshCaptcha" ariaLabelledBy="captcha"/>	
+									</items>
+								</FlexBox>
+								<Label text="Select System *"/>
+								<RadioButtonGroup columns="1" selectedIndex="2">
+									<buttons>
+										<RadioButton id="ERP_PRD" text="SAP ERP Production" selected="true"/>
+										<RadioButton id="BW_PRD" text="SAP BW/EPM Production"/>
+									</buttons>
+								</RadioButtonGroup>
+								<Label/>
+								<Button press="onSubmit" text="Submit"/>
+							</f:content>
+						</f:SimpleForm>
+						
+				        </items>
+				    </VBox>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
