@@ -27,7 +27,7 @@
     {
       "templateId": "servicecatalog.connectivityComponent",
       "templateVersion": "0.0.0",
-      "dateTimeStamp": "Thu, 21 Feb 2019 13:44:46 GMT"
+      "dateTimeStamp": "Thu, 07 Mar 2019 05:49:22 GMT"
     }
   ],
   "translation": {
@@ -51,7 +51,7 @@
   },
   "mockpreview": {
     "mockUri": "/sap/opu/odata/sap/ZSAPRESET_SRV",
-    "metadataFilePath": "",
+    "metadataFilePath": "localService/metadata.xml",
     "loadJSONFiles": false,
     "loadCustomRequests": false,
     "mockRequestsFilePath": ""

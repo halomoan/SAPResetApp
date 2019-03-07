@@ -12,10 +12,22 @@
                 <Property Name="ID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="TEXT" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
+            <EntityType Name="ReqStatus" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TEXT" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
             <EntityContainer Name="sapreset_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="CaptchaCollection" EntityType="sapreset.Captcha" sap:content-version="1"/>
+                <EntitySet Name="ReqStatusCollection" EntityType="sapreset.ReqStatus" sap:content-version="1"/>
                 <FunctionImport Name="GenCaptcha" ReturnType="sapreset.Captcha" EntitySet="CaptchaCollection" m:HttpMethod="GET">
                     <Parameter Name="Param1" Type="Edm.String" Mode="In"/>
+                </FunctionImport>
+                <FunctionImport Name="SetRequest" ReturnType="sapreset.ReqStatus" EntitySet="ReqStatusCollection" m:HttpMethod="POST">
+                    <Parameter Name="USERID" Type="Edm.String" Mode="In"/>
+                    <Parameter Name="SYSID" Type="Edm.String" Mode="In"/>
                 </FunctionImport>
             </EntityContainer>
             <atom:link

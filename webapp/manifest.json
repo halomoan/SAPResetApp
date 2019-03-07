@@ -26,7 +26,7 @@
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
-					"localUri": "localService/metadata.xml"
+					"localUri": "localService/ZSAPRESET_SRV/metadata.xml"
 				}
 			}
 		}
@@ -80,7 +80,10 @@
 				}
 			},
 			"": {
-				"dataSource": "ZSAPRESET_SRV"
+				"dataSource": "ZSAPRESET_SRV",
+				"settings": {
+					"useBatch": false
+				}
 			}
 		},
 		"resources": {

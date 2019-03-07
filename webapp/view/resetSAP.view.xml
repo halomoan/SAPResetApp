@@ -88,9 +88,11 @@
 								</RadioButtonGroup>
 								<Label/>
 								<Button press="onSubmit" text="Submit"/>
+									<Label/>
+									<FormattedText htmlText="{detailView>/htmlmsg}"/>
 							</f:content>
 						</f:SimpleForm>
-						
+					
 				        </items>
 				    </VBox>
 				</content>

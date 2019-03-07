@@ -27,7 +27,8 @@ sap.ui.define([
 				
 				oViewModel = new JSONModel({
 					busy : true,
-					delay : 0
+					delay : 0,
+					htmlmsg : ""
 				});
 				this.setModel(oViewModel, "detailView");
 				
@@ -77,13 +78,22 @@ sap.ui.define([
 		onSAPIDLiveChange: function(oEvent){
 			 var input = oEvent.getSource();
 			 if (input.getValue().length > 0) {
+			 	if (input.getValue().length === 1) {
+			 		var oViewModel = this.getModel("detailView");
+					oViewModel.setProperty("/htmlmsg","");
+			 	}
+			 	
 				input.setValue(input.getValue().toUpperCase());
 				input.setValueState(sap.ui.core.ValueState.Success); 
 			 } else {
 				input.setValueState(sap.ui.core.ValueState.None); 
+				
 			 }
+			 
 		},
 		onCaptchaLiveChange: function(oEvent){
+		
+			
 			var input = oEvent.getSource();
 			if (input.getValue() === this.sCaptcha) {
                   input.setValueState(sap.ui.core.ValueState.Success); 
@@ -113,9 +123,13 @@ sap.ui.define([
 						
 						oThis.sCaptcha = captcha.drawCaptcha(canvas,oData.TEXT);
 						oThis.getView().byId("inputCaptcha").setValue("");
-						oThis.getView().byId("inputCaptcha").focus();
 						oThis.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.None);
-						
+						if (oEvent) {
+							oThis.getView().byId("inputCaptcha").focus();
+						} else {
+							oThis.getView().byId("inputSAPID").focus();
+						}
+	
 						oViewModel.setProperty("/busy", false);
 						oViewModel.setProperty("/delay", iOriginalBusyDelay);
 						
@@ -129,9 +143,15 @@ sap.ui.define([
 				});
 		},
 		onSubmit: function(oEvent){
+			
 			var isvalid = true;
+			var oThis = this;
+			var oViewModel = this.getModel("detailView");
+			var iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
 			var userid = this.byId("inputSAPID").getValue();
-			var captcha = this.byId("inputCaptcha").getValue();
+			var sysid = "";
+			var msg = "";
+			var sCaptcha = this.byId("inputCaptcha").getValue();
 			var saperp = this.byId("ERP_PRD").getSelected();
 			var sapbw = this.byId("BW_PRD").getSelected();
 			
@@ -140,7 +160,7 @@ sap.ui.define([
 				this.getView().byId("inputSAPID").setValueState(sap.ui.core.ValueState.Error);
 				sap.m.MessageToast.show("SAP User ID Is Mandatory. Please Enter A Valid SAP User ID", {
     				duration: 3000});
-			} else if (captcha !== this.sCaptcha){
+			} else if (sCaptcha !== this.sCaptcha){
 				isvalid = false;
 				this.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.Error);
 				sap.m.MessageToast.show("Wrong Captcha. Please Enter Captcha Again", {
@@ -153,6 +173,66 @@ sap.ui.define([
 			
 			if(isvalid){
 				
+				
+				if (saperp) {
+					sysid = "ERP_SYS";
+				}
+				if (sapbw) {
+					sysid = "BW_SYS";
+				}
+				
+			
+			/*	this.oModel.refreshSecurityToken();
+				var sToken = this.oModel.getSecurityToken();
+				console.log(sToken);
+				
+				this.oModel.setHeaders({
+					"x-csrf-token" : "C6gsZsYgg0YzSMpa3-ST8w=="
+				});*/
+				
+		    	oViewModel.setProperty("/busy", true);
+				oViewModel.setProperty("/delay", 0);
+				
+			
+				this.oModel.callFunction("/SetRequest", {
+				    method: "POST",
+				    urlParameters:  {"SYSID" : sysid, "USERID": userid }, 
+					success: function(oData, oResponse) {
+						
+						if (oData.ID) {
+							if (oData.ID === "00") {
+								msg = "<p style='color:green;'>";
+								msg += oData.TEXT + "</p>";
+							
+								
+							} else {
+								msg = "<p style='color:red;'>";
+								msg += oData.TEXT + "</p>";
+							}
+							oThis.getView().byId("inputSAPID").setValue("");
+							oThis.getView().byId("inputSAPID").setValueState(sap.ui.core.ValueState.None);
+							oThis.getView().byId("inputCaptcha").setValue("");
+							oThis.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.None);
+							oThis.onRefreshCaptcha(null);
+							
+						}
+						
+						oViewModel.setProperty("/htmlmsg",msg);
+						oViewModel.setProperty("/busy", false);
+						oViewModel.setProperty("/delay", iOriginalBusyDelay);
+						
+					},
+					error: function(error) {
+						msg = "<p style='color:red;'>";
+						msg += error.responseText + "</p>";
+						oViewModel.setProperty("/htmlmsg",msg);
+						
+						oViewModel.setProperty("/busy", false);
+						oViewModel.setProperty("/delay", iOriginalBusyDelay);
+					},
+				async: false
+						
+				});
 			}
 		}
 
