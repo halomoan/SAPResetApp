@@ -12,6 +12,7 @@ sap.ui.define([
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetSAP
 		 */
+		 oCanvas: null,
 		 sCaptcha: "",
 		 oModel: null,
 		 onInit: function() {
@@ -20,32 +21,39 @@ sap.ui.define([
 		 			captcha: sCaptcha
 		 		};*/
 		 		
-		 		var oThis = this,
-		 			oViewModel,
-					fnSetAppNotBusy,
-					iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
+		 	
 				
-				oViewModel = new JSONModel({
+				var oViewModel = new JSONModel({
 					busy : true,
 					delay : 0,
 					htmlmsg : ""
 				});
 				this.setModel(oViewModel, "detailView");
 				
-				fnSetAppNotBusy = function() {
+				this.getRouter().getRoute("resetSAP").attachPatternMatched(this._onRouteMatch, this);
+
+		 },
+
+		 _onRouteMatch : function(){
+		 		
+		 		
+		 		var oViewModel = this.getModel("detailView"),
+		 			iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
+		 		var oThis = this;
+		 		
+		 		var fnSetAppNotBusy = function() {
 					oViewModel.setProperty("/busy", false);
 					oViewModel.setProperty("/delay", iOriginalBusyDelay);
 					oThis.oModel = oThis.getOwnerComponent().getModel();
-					oThis.onRefreshCaptcha(null);
+				
 					
 				};
 				
-		 		this.getView().byId("html").setContent("<canvas id='captcha' width='130' height='50' class='captcha-pad'></canvas>");
 				
-				this.getOwnerComponent().getModel().metadataLoaded()
+				
+		 		this.getOwnerComponent().getModel().metadataLoaded()
 						.then(fnSetAppNotBusy);
 		 },
-
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).
@@ -63,7 +71,8 @@ sap.ui.define([
 		onAfterRendering: function() {
 				
 				var canvas = document.getElementById("captcha");
-				this.sCaptcha = captcha.drawCaptcha(canvas);
+				this.oCanvas = canvas;
+				this.onRefreshCaptcha(null);
 			
 		},
 
@@ -110,9 +119,8 @@ sap.ui.define([
 		onRefreshCaptcha: function(oEvent){
 			var oViewModel = this.getModel("detailView");
 			var iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
-			var canvas = document.getElementById("captcha");
 			var oThis = this;
-			
+		
 			oViewModel.setProperty("/busy", true);
 			oViewModel.setProperty("/delay", 0);
 			
@@ -121,7 +129,7 @@ sap.ui.define([
 				    urlParameters:  {"Param1" : "xx0xx"  }, 
 					success: function(oData, oResponse) {
 						
-						oThis.sCaptcha = captcha.drawCaptcha(canvas,oData.TEXT);
+						oThis.sCaptcha = captcha.drawCaptcha(oThis.oCanvas,oData.TEXT);
 						oThis.getView().byId("inputCaptcha").setValue("");
 						oThis.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.None);
 						if (oEvent) {

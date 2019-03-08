@@ -6,9 +6,7 @@
 	xmlns="sap.m" 
 	xmlns:f="sap.ui.layout.form"
 	xmlns:html="http://www.w3.org/1999/xhtml" controllerName="app.sap.resetSAPResetApp.controller.resetSAP">
-	<App>
-		<pages>
-			<Page title="{i18n>title}">
+	<Page title="{i18n>title}">
 				<content>
 				    <VBox width="100%" direction="Column" id="__vbox0">
 				        <items>
@@ -53,8 +51,6 @@
 							columnsM="1"
 							singleContainerFullSize="false" >
 							<f:content>
-							
-							
 								<Label text="SAP User ID *" labelFor="inputSAPID"/>
 								<Input
 									id="inputSAPID"
@@ -74,8 +70,7 @@
 								/>
 								<FlexBox  justifyContent="Start">
 									<items>
-										<core:HTML id="html">
-										</core:HTML>
+										<core:HTML preferDOM="true" content="&lt;canvas id='captcha' width='140' height='50' class='captcha-pad'/&gt;" />
 									    <Button icon="sap-icon://synchronize" type="Transparent" press="onRefreshCaptcha" ariaLabelledBy="captcha"/>	
 									</items>
 								</FlexBox>
@@ -97,6 +92,4 @@
 				    </VBox>
 				</content>
 			</Page>
-		</pages>
-	</App>
 </mvc:View>

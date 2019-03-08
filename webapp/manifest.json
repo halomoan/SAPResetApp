@@ -53,8 +53,10 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "app.sap.resetSAPResetApp.view.resetSAP",
-			"type": "XML"
+			"viewName": "app.sap.resetSAPResetApp.view.App",
+			"type": "XML",
+			"async": true,
+        	"id": "app"
 		},
 		"dependencies": {
 			"minUI5Version": "1.30.0",
@@ -92,6 +94,48 @@
 					"uri": "css/style.css"
 				}
 			]
-		}
+		},
+		
+      "routing": {
+         "config": {
+            "routerClass": "sap.m.routing.Router",
+            "viewType": "XML",
+            "viewPath": "app.sap.resetSAPResetApp.view",
+            "controlId": "app",
+            "controlAggregation": "pages",
+            "transition": "slide",
+            "async": true,
+            "bypassed": {
+               "target": "notFound"
+            }
+         },
+         "routes": [{
+            "pattern": "",
+            "name": "resetSAP",
+            "target": "resetSAP"
+         },{
+            "pattern": "resetLink/{resetcode}/source/{sourceid}",
+            "name": "resetLink",
+            "target": "resetLink"
+         }],
+         "targets": {
+            "resetSAP": {
+               "viewId": "resetSAP",
+               "viewName": "resetSAP",
+               "viewLevel" : 1
+            },
+            "resetLink": {
+               "viewId": "resetLink",
+               "viewName": "resetLink",
+               "viewLevel" : 1
+            },
+            "notFound": {
+               "viewId": "notFound",
+               "viewName": "NotFound",
+               "transition": "show"
+            }
+            
+         }
+      }
 	}
 }

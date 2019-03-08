@@ -1,7 +1,7 @@
 sap.ui.define([
 		"sap/ui/core/mvc/Controller",
-		"sap/ui/core/routing/History"
-	], function (Controller, History) { 
+		"sap/ui/core/UIComponent"
+	], function (Controller, UIComponent) { 
 		
 	"use strict";
 
@@ -12,5 +12,8 @@ sap.ui.define([
 		getModel : function (sName) {
 			return this.getView().getModel(sName);
 		},
+		getRouter : function () {
+			return UIComponent.getRouterFor(this);
+		}
 	});
 });
