@@ -10,8 +10,8 @@
 			<f:SimpleForm id="SAPUserIDForm"
 							editable="true"
 							layout="ResponsiveGridLayout"
-							labelSpanXL="3"
-							labelSpanL="3"
+							labelSpanXL="4"
+							labelSpanL="4"
 							labelSpanM="3"
 							labelSpanS="12"
 							adjustLabelSpan="false"
@@ -24,21 +24,26 @@
 							columnsM="1"
 							singleContainerFullSize="false" >
 				    
-				    <Label></Label>
-				    <ObjectStatus
-						text="{i18n>resetCodeText}"
-						icon="sap-icon://hint"
-						state="Warning" />
-						<Label text="Reset Code *" labelFor="inputCode"/>
+				    	<Label text="Reset Code"></Label>
+				    
+					   	<FlexBox  justifyContent="Start">
+							<items>
+							<core:HTML preferDOM="true" content="&lt;canvas id='captcha' width='140' height='50' class='captcha-pad'/&gt;" />
+						</items>
+						</FlexBox>
+					
+						<Label text="Enter Reset Code *" labelFor="inputCode"/>
 								<Input
 									id="inputCode"
 									type="Text"
 									placeholder="Enter The Reset Code"
 									enabled="true"
-									maxLength="12"
+									maxLength="8"
+									liveChange = "onCaptchaLiveChange"
 								/>
 						<Label/>
-						<Label text="{SEED}"></Label>
+						
+						
 						<Button class="sapUiSmallMarginTop" type="Accept" press="onSubmit" text="Submit"/>
 						<Button class="sapUiSmallMarginTop" press="onReset" text="Reset"/>
 			</f:SimpleForm>

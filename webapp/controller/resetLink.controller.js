@@ -1,7 +1,8 @@
 sap.ui.define([
 	"app/sap/resetSAPResetApp/controller/BaseController",
-	"sap/ui/model/json/JSONModel"
-], function(BaseController,JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"app/sap/resetSAPResetApp/model/captcha"
+], function(BaseController,JSONModel,captcha) {
 	"use strict";
 
 	return BaseController.extend("app.sap.resetSAPResetApp.controller.resetLink", {
@@ -11,6 +12,9 @@ sap.ui.define([
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetLink
 		 */
+		oCanvas: null,
+		sCaptcha: "",
+		oArgs: null,
 		onInit: function() {
 			var oViewModel = new JSONModel({
 					busy : true,
@@ -25,11 +29,10 @@ sap.ui.define([
 		 		
 		 		var oViewModel = this.getModel("detailView"),
 		 			iOriginalBusyDelay = this.getView().getBusyIndicatorDelay(),
-		 			oArgs = oEvent.getParameter("arguments"),
 		 			oView = this.getView();
 		 			
 		 		var oThis = this;
-		 		
+		 		this.oArgs = oEvent.getParameter("arguments");
 		 		
 		 		var fnSetAppNotBusy = function() {
 					oViewModel.setProperty("/busy", false);
@@ -43,10 +46,10 @@ sap.ui.define([
 		 		this.getOwnerComponent().getModel().metadataLoaded()
 						.then(fnSetAppNotBusy);
 			
-				console.log(oArgs);
-				if (oArgs.resetcode && oArgs.sourceid === 'email') {		
+		
+				if (this.oArgs.resetcode && this.oArgs.sourceid === 'email') {		
 						oView.bindElement({
-							path : "/ResetLinkSet('" + oArgs.resetcode + "')",
+							path : "/ResetLinkSet('" + this.oArgs.resetcode + "')",
 							events : {
 								change: this._onBindingChange.bind(this),
 								dataRequested: function (oEvent) {
@@ -54,6 +57,7 @@ sap.ui.define([
 									oViewModel.setProperty("/delay", 0);
 								},
 								dataReceived: function (oEvent) {
+									oThis.onRefreshCaptcha(null);
 									oViewModel.setProperty("/busy", false);
 									oViewModel.setProperty("/delay", iOriginalBusyDelay);
 								}
@@ -69,7 +73,7 @@ sap.ui.define([
 			if (!this.getView().getBindingContext()) {
 				this.getRouter().getTargets().display("notFound");
 			}
-		}
+		},
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).
@@ -84,9 +88,10 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetLink
 		 */
-		//	onAfterRendering: function() {
-		//
-		//	},
+		onAfterRendering: function() {
+				var canvas = document.getElementById("captcha");
+				this.oCanvas = canvas;
+		},
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
@@ -95,7 +100,27 @@ sap.ui.define([
 		//	onExit: function() {
 		//
 		//	}
-
+		onRefreshCaptcha: function(oEvent){
+			var oContext = this.getView().getBindingContext();
+			this.sCaptcha = captcha.drawCaptcha(this.oCanvas,oContext.getProperty("SEED"));
+			
+		},
+		onCaptchaLiveChange: function(oEvent){
+		
+			
+			var input = oEvent.getSource();
+			if (input.getValue() === this.sCaptcha) {
+                  input.setValueState(sap.ui.core.ValueState.Success); 
+            }
+            else {
+            	if (input.getValue().length === 8) {
+                  input.setValueState(sap.ui.core.ValueState.Error); 
+            	}else{
+            		 input.setValueState(sap.ui.core.ValueState.None); 
+            	}
+            	
+            }
+		},
 	});
 
 });
