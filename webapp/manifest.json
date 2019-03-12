@@ -114,7 +114,7 @@
             "name": "resetSAP",
             "target": "resetSAP"
          },{
-            "pattern": "resetLink/{resetcode}/source/{sourceid}",
+            "pattern": "resetLink/{resetcode}/{syscode}/source/{sourceid}",
             "name": "resetLink",
             "target": "resetLink"
          }],

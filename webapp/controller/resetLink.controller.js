@@ -47,7 +47,7 @@ sap.ui.define([
 						.then(fnSetAppNotBusy);
 			
 		
-				if (this.oArgs.resetcode && this.oArgs.sourceid === 'email') {		
+				if (this.oArgs.resetcode && this.oArgs.syscode && this.oArgs.sourceid === 'email') {		
 						oView.bindElement({
 							path : "/ResetLinkSet('" + this.oArgs.resetcode + "')",
 							events : {
@@ -121,6 +121,65 @@ sap.ui.define([
             	
             }
 		},
+		onSubmit: function(oEvent){
+			var msg;
+			var oViewModel = this.getModel("detailView");
+			var iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
+			
+			if (this.sCaptcha === this.byId("inputCode").getValue()) {
+				
+					oViewModel.setProperty("/busy", true);
+					oViewModel.setProperty("/delay", 0);
+				
+					this.oModel.callFunction("/SetReset", {
+				    method: "POST",
+				    urlParameters:  {"SYSID" : this.oArgs.syscode,  "UUID": this.oArgs.resetcode }, 
+					success: function(oData, oResponse) {
+						if (oData.ID) {
+							if (oData.ID === "00") {
+								msg = "<p style='color:green;'>";
+								msg += oData.TEXT + "</p>";
+							
+								
+							} else {
+								msg = "<p style='color:red;'>";
+								msg += oData.TEXT + "</p>";
+								oViewModel.setProperty("/htmlmsg",msg);
+							}
+						}
+						
+					
+						oViewModel.setProperty("/busy", false);
+						oViewModel.setProperty("/delay", iOriginalBusyDelay);
+						
+					},
+					error: function(error) {
+						msg = "<p style='color:red;'>";
+						msg += error.responseText + "</p>";
+						oViewModel.setProperty("/htmlmsg",msg);
+						
+						oViewModel.setProperty("/busy", false);
+						oViewModel.setProperty("/delay", iOriginalBusyDelay);
+					},
+				async: false
+						
+				});
+			} else {
+				msg = "<p style='color:red;'>";
+				msg += "Error: Invalid Reset Code" + "</p>";
+				
+				oViewModel.setProperty("/htmlmsg",msg);
+			}
+		},
+		onReset: function(){
+			var oViewModel = this.getModel("detailView");
+			
+			this.byId("inputCode").setValue("");
+			oViewModel.setProperty("/htmlmsg","");
+		}
+		
+			
+		
 	});
 
 });

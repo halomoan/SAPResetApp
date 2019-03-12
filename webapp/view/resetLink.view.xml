@@ -46,6 +46,8 @@
 						
 						<Button class="sapUiSmallMarginTop" type="Accept" press="onSubmit" text="Submit"/>
 						<Button class="sapUiSmallMarginTop" press="onReset" text="Reset"/>
+						<Label/>
+								<FormattedText htmlText="{detailView>/htmlmsg}"/>
 			</f:SimpleForm>
 	</content>
 	</Page>

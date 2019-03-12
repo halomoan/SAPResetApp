@@ -45,7 +45,7 @@ sap.ui.define([
 					oViewModel.setProperty("/busy", false);
 					oViewModel.setProperty("/delay", iOriginalBusyDelay);
 					oThis.oModel = oThis.getOwnerComponent().getModel();
-				
+					oThis.onRefreshCaptcha(null);
 					
 				};
 				
@@ -72,7 +72,7 @@ sap.ui.define([
 				
 				var canvas = document.getElementById("captcha");
 				this.oCanvas = canvas;
-				this.onRefreshCaptcha(null);
+			
 			
 		},
 
