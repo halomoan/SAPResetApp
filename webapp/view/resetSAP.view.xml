@@ -70,7 +70,7 @@
 								/>
 								<FlexBox  justifyContent="Start">
 									<items>
-										<core:HTML preferDOM="true" content="&lt;canvas id='captcha' width='140' height='50' class='captcha-pad'/&gt;" />
+										<core:HTML preferDOM="true" content="&lt;canvas id='captcha' width='150' height='50' class='captcha-pad'/&gt;" />
 									    <Button icon="sap-icon://synchronize" type="Transparent" press="onRefreshCaptcha" ariaLabelledBy="captcha"/>	
 									</items>
 								</FlexBox>

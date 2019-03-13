@@ -15,7 +15,7 @@
 		},
 		"dataSources": {
 			"default": {
-				"uri": "https://services.odata.org/TripPinRESTierService/(S(id))/",
+				"uri": "/sap/opu/odata/sap/ZSAPRESET_SRV/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0"
@@ -56,7 +56,7 @@
 			"viewName": "app.sap.resetSAPResetApp.view.App",
 			"type": "XML",
 			"async": true,
-        	"id": "app"
+			"id": "app"
 		},
 		"dependencies": {
 			"minUI5Version": "1.30.0",
@@ -82,7 +82,7 @@
 				}
 			},
 			"": {
-				"dataSource": "ZSAPRESET_SRV",
+				"dataSource": "default",
 				"settings": {
 					"useBatch": false
 				}
@@ -95,47 +95,52 @@
 				}
 			]
 		},
-		
-      "routing": {
-         "config": {
-            "routerClass": "sap.m.routing.Router",
-            "viewType": "XML",
-            "viewPath": "app.sap.resetSAPResetApp.view",
-            "controlId": "app",
-            "controlAggregation": "pages",
-            "transition": "slide",
-            "async": true,
-            "bypassed": {
-               "target": "notFound"
-            }
-         },
-         "routes": [{
-            "pattern": "",
-            "name": "resetSAP",
-            "target": "resetSAP"
-         },{
-            "pattern": "resetLink/{resetcode}/{syscode}/source/{sourceid}",
-            "name": "resetLink",
-            "target": "resetLink"
-         }],
-         "targets": {
-            "resetSAP": {
-               "viewId": "resetSAP",
-               "viewName": "resetSAP",
-               "viewLevel" : 1
-            },
-            "resetLink": {
-               "viewId": "resetLink",
-               "viewName": "resetLink",
-               "viewLevel" : 1
-            },
-            "notFound": {
-               "viewId": "notFound",
-               "viewName": "NotFound",
-               "transition": "show"
-            }
-            
-         }
-      }
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "app.sap.resetSAPResetApp.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"transition": "slide",
+				"async": true,
+				"bypassed": {
+					"target": "notFound"
+				}
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "resetSAP",
+					"target": "resetSAP"
+				},
+				{
+					"pattern": "resetLink/{resetcode}/{syscode}/source/{sourceid}",
+					"name": "resetLink",
+					"target": "resetLink"
+				}
+			],
+			"targets": {
+				"resetSAP": {
+					"viewId": "resetSAP",
+					"viewName": "resetSAP",
+					"viewLevel": 1
+				},
+				"resetLink": {
+					"viewId": "resetLink",
+					"viewName": "resetLink",
+					"viewLevel": 1
+				},
+				"notFound": {
+					"viewId": "notFound",
+					"viewName": "NotFound",
+					"transition": "show"
+				}
+			}
+		}
+	},
+	"sap.platform.abap": {
+		"uri": "/sap/bc/ui5_ui5/sap/zsapreset/webapp",
+		"_version": "1.1.0"
 	}
 }

@@ -12,7 +12,6 @@ sap.ui.define([
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetLink
 		 */
-		oCanvas: null,
 		sCaptcha: "",
 		oArgs: null,
 		onInit: function() {
@@ -47,7 +46,8 @@ sap.ui.define([
 						.then(fnSetAppNotBusy);
 			
 		
-				if (this.oArgs.resetcode && this.oArgs.syscode && this.oArgs.sourceid === 'email') {		
+				if (this.oArgs.resetcode && this.oArgs.syscode && this.oArgs.sourceid === 'email') {	
+					
 						oView.bindElement({
 							path : "/ResetLinkSet('" + this.oArgs.resetcode + "')",
 							events : {
@@ -88,10 +88,10 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetLink
 		 */
-		onAfterRendering: function() {
+		/*onAfterRendering: function() {
 				var canvas = document.getElementById("captcha");
 				this.oCanvas = canvas;
-		},
+		},*/
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
@@ -101,8 +101,10 @@ sap.ui.define([
 		//
 		//	}
 		onRefreshCaptcha: function(oEvent){
+		
 			var oContext = this.getView().getBindingContext();
-			this.sCaptcha = captcha.drawCaptcha(this.oCanvas,oContext.getProperty("SEED"));
+			var canvas = document.getElementById("captcha");
+			this.sCaptcha = captcha.drawCaptcha(canvas,oContext.getProperty("SEED"));
 			
 		},
 		onCaptchaLiveChange: function(oEvent){
@@ -131,6 +133,10 @@ sap.ui.define([
 					oViewModel.setProperty("/busy", true);
 					oViewModel.setProperty("/delay", 0);
 				
+					this.oModel.setHeaders({
+						'X-Requested-With': 'X'
+					});
+					
 					this.oModel.callFunction("/SetReset", {
 				    method: "POST",
 				    urlParameters:  {"SYSID" : this.oArgs.syscode,  "UUID": this.oArgs.resetcode }, 
@@ -139,7 +145,7 @@ sap.ui.define([
 							if (oData.ID === "00") {
 								msg = "<p style='color:green;'>";
 								msg += oData.TEXT + "</p>";
-							
+								oViewModel.setProperty("/htmlmsg",msg);
 								
 							} else {
 								msg = "<p style='color:red;'>";

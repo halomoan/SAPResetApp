@@ -12,7 +12,6 @@ sap.ui.define([
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetSAP
 		 */
-		 oCanvas: null,
 		 sCaptcha: "",
 		 oModel: null,
 		 onInit: function() {
@@ -68,14 +67,14 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetSAP
 		 */
-		onAfterRendering: function() {
+		/*onAfterRendering: function() {
 				
-				var canvas = document.getElementById("captcha");
-				this.oCanvas = canvas;
+				//var canvas = document.getElementById("captcha");
+				//this.oCanvas = canvas;
 			
 			
 		},
-
+		*/
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetSAP
@@ -124,12 +123,16 @@ sap.ui.define([
 			oViewModel.setProperty("/busy", true);
 			oViewModel.setProperty("/delay", 0);
 			
+			this.oModel.setHeaders({
+				'X-Requested-With': 'X'
+			});
 			this.oModel.callFunction("/GenCaptcha", {
 				    method: "GET",
 				    urlParameters:  {"Param1" : "xx0xx"  }, 
 					success: function(oData, oResponse) {
 						
-						oThis.sCaptcha = captcha.drawCaptcha(oThis.oCanvas,oData.TEXT);
+						var canvas = document.getElementById("captcha");
+						oThis.sCaptcha = captcha.drawCaptcha(canvas,oData.TEXT);
 						oThis.getView().byId("inputCaptcha").setValue("");
 						oThis.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.None);
 						if (oEvent) {

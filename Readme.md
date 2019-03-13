@@ -1,0 +1,1 @@
+1. Configure ODATA Service in SICF tcode with ~CHECK_CSRF_TOKEN = 0
