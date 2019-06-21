@@ -38,7 +38,7 @@
 									type="Text"
 									placeholder="Enter The Reset Code"
 									enabled="true"
-									maxLength="8"
+									maxLength="9"
 									liveChange = "onCaptchaLiveChange"
 								/>
 						<Label/>

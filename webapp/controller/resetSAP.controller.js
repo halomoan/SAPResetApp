@@ -160,11 +160,15 @@ sap.ui.define([
 			var oViewModel = this.getModel("detailView");
 			var iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
 			var userid = this.byId("inputSAPID").getValue();
-			var sysid = "";
+			
 			var msg = "";
 			var sCaptcha = this.byId("inputCaptcha").getValue();
-			var saperp = this.byId("ERP_PRD").getSelected();
-			var sapbw = this.byId("BW_PRD").getSelected();
+			var sysid = this.byId("ERP_PRD").getSelected() ? "ERP_PRD" : false;
+			if (!sysid) sysid =  this.byId("BW_PRD").getSelected() ? "BW_PRD" : false;
+			if (!sysid) sysid =  this.byId("ERP_QAS").getSelected() ? "ERP_QAS" : false;
+			if (!sysid) sysid =  this.byId("BW_QAS").getSelected() ? "BW_QAS" : false; 
+			
+
 			
 			if (!userid) {
 				isvalid = false;
@@ -176,21 +180,13 @@ sap.ui.define([
 				this.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.Error);
 				sap.m.MessageToast.show("Wrong Captcha. Please Enter Captcha Again", {
     				duration: 3000});
-			} else if ( ! ( saperp || sapbw ) ) {
+			} else if ( ! ( sysid ) ) {
 				isvalid = false;
 				sap.m.MessageToast.show("Please Select A System", {
     				duration: 3000});
 			}
 			
 			if(isvalid){
-				
-				
-				if (saperp) {
-					sysid = "ERP_SYS";
-				}
-				if (sapbw) {
-					sysid = "BW_SYS";
-				}
 				
 			
 			/*	this.oModel.refreshSecurityToken();
@@ -220,7 +216,7 @@ sap.ui.define([
 								msg = "<p style='color:red;'>";
 								msg += oData.TEXT + "</p>";
 							}
-							oThis.getView().byId("inputSAPID").setValue("");
+							//oThis.getView().byId("inputSAPID").setValue("");
 							oThis.getView().byId("inputSAPID").setValueState(sap.ui.core.ValueState.None);
 							oThis.getView().byId("inputCaptcha").setValue("");
 							oThis.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.None);

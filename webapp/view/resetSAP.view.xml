@@ -27,7 +27,14 @@
 										title="Step Two"
 										type="Inactive">
 										<attributes>
-										<ObjectAttribute text="Check Your Email For One-Time Password and The Reset Link" />
+										<ObjectAttribute text="Check Your Office Email For The Reset Link" />
+										</attributes>
+									</ObjectListItem>
+									<ObjectListItem
+										title="Step Three"
+										type="Inactive">
+										<attributes>
+										<ObjectAttribute text="Check Your Office Email For The Reset Password" />
 										</attributes>
 									</ObjectListItem>
 								</items>
@@ -74,11 +81,14 @@
 									    <Button icon="sap-icon://synchronize" type="Transparent" press="onRefreshCaptcha" ariaLabelledBy="captcha"/>	
 									</items>
 								</FlexBox>
+								
 								<Label text="Select System *"/>
-								<RadioButtonGroup columns="1" selectedIndex="2">
+								<RadioButtonGroup columns="2" selectedIndex="0">
 									<buttons>
-										<RadioButton id="ERP_PRD" text="SAP ERP Production" selected="true"/>
+										<RadioButton id="ERP_PRD" text="SAP ERP Production"/>
 										<RadioButton id="BW_PRD" text="SAP BW/EPM Production"/>
+										<RadioButton id="ERP_QAS" text="SAP ERP QAS"/>
+										<RadioButton id="BW_QAS" text="SAP BW/EPM QAS"/>
 									</buttons>
 								</RadioButtonGroup>
 								<Label/>
