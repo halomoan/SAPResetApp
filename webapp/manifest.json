@@ -82,7 +82,7 @@
 				}
 			},
 			"": {
-				"dataSource": "ZSAPRESET_SRV",
+				"dataSource": "default",
 				"settings": {
 					"useBatch": false
 				}
