@@ -44,12 +44,10 @@ sap.ui.define([
 					oViewModel.setProperty("/busy", false);
 					oViewModel.setProperty("/delay", iOriginalBusyDelay);
 					oThis.oModel = oThis.getOwnerComponent().getModel();
-					oThis.onRefreshCaptcha(null);
+					//oThis.onRefreshCaptcha(null);
 					
 				};
-				
-				
-				
+	
 		 		this.getOwnerComponent().getModel().metadataLoaded()
 						.then(fnSetAppNotBusy);
 		 },
@@ -67,14 +65,26 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetSAP
 		 */
-		/*onAfterRendering: function() {
+		onAfterRendering: function() {
 				
 				//var canvas = document.getElementById("captcha");
-				//this.oCanvas = canvas;
-			
+				//var canvas1 = $("captcha");
+				//var canvas = this.getView().byId(this.getView().getId() + "--captcha");
+				//console.log("1.",canvas);
+				//console.log("1.",canvas1);
+				
+				var oThis = this;
+				
+				var fnDrawCaptcha = function() {
+					oThis.onRefreshCaptcha(null);
+					
+				};
+		
+		 		this.getOwnerComponent().getModel().metadataLoaded()
+						.then(fnDrawCaptcha);
 			
 		},
-		*/
+		
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
 		 * @memberOf app.sap.resetSAPResetApp.view.resetSAP
@@ -132,6 +142,7 @@ sap.ui.define([
 					success: function(oData, oResponse) {
 						
 						var canvas = document.getElementById("captcha");
+						//console.log("2.",canvas);
 						oThis.sCaptcha = captcha.drawCaptcha(canvas,oData.TEXT);
 						oThis.getView().byId("inputCaptcha").setValue("");
 						oThis.getView().byId("inputCaptcha").setValueState(sap.ui.core.ValueState.None);
